@@ -24,16 +24,14 @@ class UserSessionWidget extends Component {
 
 	handleShow = (e) => {
 		e.preventDefault()        
-        this.setState({show: true})
-        console.log(this.state.show)
-		//const {showLoginDialogAction} = this.props
-		//showLoginDialogAction()
+		const {showLoginDialogAction} = this.props
+		showLoginDialogAction()
 	}
 
 	handleClose = () => {
         this.setState({show: false})
-		//const {hideLoginDialogAction} = this.props
-		//hideLoginDialogAction()
+		const {hideLoginDialogAction} = this.props
+		hideLoginDialogAction()
 	}
 
 	handleChange = (e) => {
@@ -41,13 +39,10 @@ class UserSessionWidget extends Component {
 		this.setState({[name]: value})
 	}
 
-	handleSubmit = (e) => {
-		
-		e.preventDefault()
-		
+	handleSubmit = (e) => {		
+		e.preventDefault()		
 		const {userID, password} = this.state
 		const {authenticateUserAction} = this.props
-
 		authenticateUserAction(userID, password)
 	}
 
@@ -60,9 +55,8 @@ class UserSessionWidget extends Component {
 	render(){
 
 		var showDialog = this.props.showLoginDialog
-		if(showDialog === undefined){
-			showDialog = false
-		}
+		if(showDialog === undefined) showDialog = false;
+		
 
 		const token = this.props.accessToken
 		let button
@@ -77,7 +71,7 @@ class UserSessionWidget extends Component {
 			<>
 				{button}
 
-				<Modal show={this.state.show} onHide={this.handleClose} centered>
+				<Modal show={showDialog} onHide={this.handleClose} centered>
 					<Modal.Header closeButton>
 						<Modal.Title>
 							Login
@@ -97,6 +91,7 @@ class UserSessionWidget extends Component {
 					</Modal.Body>
 					
 					<Modal.Footer>
+                        <Button id="CancelButton" variant="custom" type="cancel" onClick={this.handleClose}>Cancel</Button>
 						<Button id="LoginButton" variant="custom" type="submit" onClick={this.handleSubmit}>Login</Button>
 					</Modal.Footer>
 				</Modal>
@@ -112,6 +107,5 @@ const mapDispatchToProps = dispatch => bindActionCreators({
 	logoutAction: authenticationActions.getLogoutUserAction
 }, dispatch)
 
-const ConnectedUserSessionWidget = connect(mapStateToProps, mapDispatchToProps)(UserSessionWidget)
 
-export default UserSessionWidget
+export default connect(mapStateToProps, mapDispatchToProps)(UserSessionWidget)
