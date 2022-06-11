@@ -48,9 +48,8 @@ export function authenticateUser(userID, password){
 	return dispatch => {
 		dispatch(getAuthenticationPendingAction())
 		login(userID, password)
-		.then(
+		.then(			
 			userSession => {
-				// add userID to state store
 				userSession.userID = userID
 				const action = getAuthenticationSuccessAction(userSession)
 				dispatch(action)
@@ -66,17 +65,15 @@ export function authenticateUser(userID, password){
 }
 
 function login(userID, password){
-
-	const base64credentials = btoa(userID + ":" + password)
-
+	const credentials = btoa(userID + ":" + password)
 	const requestOptions = {
 		method: 'GET',
+		mode: "cors",
 		headers: {
 			'Content-Type': 'application/json',
-			'Authorization': 'Basic ' + base64credentials
+			'authorization': 'Basic ' + credentials
 		}
 	}
-
 	return fetch('https://localhost/authenticate', requestOptions)
 		.then(handleResponse)
 		.then(userSession => {
@@ -85,13 +82,11 @@ function login(userID, password){
 }
 
 function handleResponse(response){
-
 	const authorizationHeader = response.headers.get("Authorization")
-
-	return response.text().then(() => {
+	return response.text().then(text => {
 
 		let token
-
+		const data = text && JSON.parse(text)
 		if(authorizationHeader){
 			token = authorizationHeader.split(" ")[1]
 		}
@@ -103,10 +98,8 @@ function handleResponse(response){
 			const error = response.statusText
 			return Promise.reject(error)
 		} else {
-			let userSession = {
-				accessToken: token
-			}
-			return userSession
+			return {user: data, 
+					accessToken: token}
 		}
 	})
 }

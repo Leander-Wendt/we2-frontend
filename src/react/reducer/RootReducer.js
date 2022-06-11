@@ -10,6 +10,8 @@ const initialState = {
 
 function rootReducer(state = initialState, action){
 
+	console.log("Bin im reducer " + action.type)
+
 	switch(action.type){
 		case authenticationActions.SHOW_LOGIN_DIALOG:
 			return {

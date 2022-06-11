@@ -19,7 +19,7 @@ class LoginButton extends Component {
 	render(){
 		return(
 			<div>
-				<Button variant="custom" onClick={this.showLoginDialog}>
+				<Button  id="MainPageLoginButton" variant="custom" onClick={this.showLoginDialog}>
 					Login
 				</Button>
 			</div>

@@ -9,11 +9,14 @@ import { Provider } from 'react-redux'
 import rootReducer from './react/reducer/RootReducer'
 import thunk from 'redux-thunk'
 import "./css/bootstrap.min.css"
+import { composeWithDevTools } from "redux-devtools-extension"
 
 const initialState = {}
 const middlewares = [thunk]
 
-const store = createStore(rootReducer)
+const store = createStore(rootReducer, composeWithDevTools(
+  applyMiddleware(...middlewares)
+))
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
