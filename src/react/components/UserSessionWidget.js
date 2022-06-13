@@ -15,6 +15,8 @@ class UserSessionWidget extends Component {
 		super(props)
 		this.state = {
             show: false,
+			enableBtn: false,
+			enableWarning: false,
 			userID: '',
 			password: ''
 		}
@@ -29,14 +31,20 @@ class UserSessionWidget extends Component {
 	}
 
 	handleClose = () => {
-        this.setState({show: false})
+        this.setState({show: false, userID: "", password: "", enableBtn: false, enableWarning: false})
 		const {hideLoginDialogAction} = this.props
 		hideLoginDialogAction()
 	}
 
 	handleChange = (e) => {
 		const {name, value} = e.target
-		this.setState({[name]: value})
+		this.setState({[name]: value}, () => {
+			if(this.state.userID.trim() && this.state.password.trim()){
+				this.setState({enableBtn: true})
+			} else {
+				this.setState({enableBtn: false})
+			}	
+		})			
 	}
 
 	handleSubmit = (e) => {		
@@ -44,6 +52,7 @@ class UserSessionWidget extends Component {
 		const {userID, password} = this.state
 		const {authenticateUserAction} = this.props
 		authenticateUserAction(userID, password)
+		this.setState({enableWarning: true})
 	}
 
 	handleLogout = (e) => {
@@ -88,11 +97,12 @@ class UserSessionWidget extends Component {
 								<Form.Control id="LoginPasswordInput" type="password" name="password" placeholder="Password" onChange={this.handleChange} />
 							</Form.Group>
 						</Form>
+						<p hidden={!this.state.enableWarning} style={{color:"red", textAlign:"center"}}>Eingabedaten sind falsch.</p>
 					</Modal.Body>
 					
 					<Modal.Footer>
                         <Button id="CancelButton" variant="custom" type="cancel" onClick={this.handleClose}>Cancel</Button>
-						<Button id="LoginButton" variant="custom" type="submit" onClick={this.handleSubmit}>Login</Button>
+						<Button id="LoginButton" disabled={!this.state.enableBtn} variant="custom" type="submit" onClick={this.handleSubmit}>Login</Button>
 					</Modal.Footer>
 				</Modal>
 			</>
