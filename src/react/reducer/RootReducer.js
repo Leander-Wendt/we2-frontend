@@ -36,7 +36,7 @@ function rootReducer(state = initialState, action){
 				...state,
 				showLoginDialog: false,
 				pending: false,
-				userID: action.userID,
+				user: action.user,
 				accessToken: action.accessToken
 			}
 		case authenticationActions.AUTHENTICATION_ERROR:

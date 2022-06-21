@@ -7,10 +7,14 @@ const mapStateToProps = state => {
 
 class PrivatePage extends Component {
 
+	constructor(props){
+		super(props)
+	}
+
 	render(){
 		return(
 			<div className="page-content" id="PrivatePage">
-                <h2>Wilkommen</h2>
+                <h2>Wilkommen, {this.props.user.userName}!</h2>
 			</div>
 		)
 	}

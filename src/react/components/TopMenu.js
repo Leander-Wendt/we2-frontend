@@ -1,9 +1,19 @@
 import React, { Component } from "react"
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap"
 import UserSessionWidget from './UserSessionWidget'
+import {connect} from 'react-redux'
 import Engi from "../../images/Engi.png";
 
+const mapStateToProps = state => {
+	return state
+}
+
 class TopMenu extends Component {
+
+	constructor(props){
+		super(props)
+	}
+	
 
 	render() {
 		return (
@@ -35,4 +45,4 @@ class TopMenu extends Component {
 	}
 }
 
-export default TopMenu
+export default connect(mapStateToProps)(TopMenu)
