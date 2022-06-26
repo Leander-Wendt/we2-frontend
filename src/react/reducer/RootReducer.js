@@ -5,6 +5,7 @@ const initialState = {
 	loginPending: false,
 	showLoginDialog: false,
 	accessToken: null,
+	isAdministrator: null,
 	error: null
 }
 
@@ -37,7 +38,8 @@ function rootReducer(state = initialState, action){
 				showLoginDialog: false,
 				pending: false,
 				user: action.user,
-				accessToken: action.accessToken
+				accessToken: action.accessToken,
+				isAdministrator: action.user.isAdministrator
 			}
 		case authenticationActions.AUTHENTICATION_ERROR:
 			return {
@@ -49,7 +51,8 @@ function rootReducer(state = initialState, action){
 			return {
 				...state,
 				user: null,
-				accessToken: null
+				accessToken: null,
+				isAdministrator: null
 			}
 		default:
 			return state
