@@ -6,6 +6,7 @@ const initialState = {
 	showLoginDialog: false,
 	accessToken: null,
 	isAdministrator: null,
+	users: null,
 	error: null
 }
 
@@ -53,6 +54,11 @@ function rootReducer(state = initialState, action){
 				user: null,
 				accessToken: null,
 				isAdministrator: null
+			}
+		case authenticationActions.GET_USERS_SUCCESS:
+			return {
+				...state,
+				users: action.users
 			}
 		default:
 			return state

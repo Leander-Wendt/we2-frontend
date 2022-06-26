@@ -4,6 +4,7 @@ export const AUTHENTICATION_PENDING = "AUTHENTICATION_PENDING"
 export const AUTHENTICATION_SUCCESS = "AUTHENTICATION_SUCCESS"
 export const AUTHENTICATION_ERROR = "AUTHENTICATION_ERROR"
 export const LOGOUT_USER = "LOGOUT_USER"
+export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS"
 
 export function getShowLoginDialogAction(){
 	return {
@@ -45,6 +46,13 @@ export function getLogoutUserAction(){
 	}
 }
 
+export function getUsersSuccessAction(data){
+	return {
+		type: GET_USERS_SUCCESS,
+		users: data
+	}
+}
+
 export function authenticateUser(userID, password){
 	return dispatch => {
 		dispatch(getAuthenticationPendingAction())
@@ -81,6 +89,31 @@ function login(userID, password){
 		})
 }
 
+export function getUserData(token) {
+	getUsers(token)
+		.then( 
+			data => {
+				const action = getUsersSuccessAction(data)
+				dispatch(action)
+		})
+}
+
+function getUsers(token){
+	const requestOptions = {
+		method: 'GET',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': token
+		}
+	}
+	return fetch('https://localhost/users', requestOptions)
+		.then(handleUsersResponse)
+		.then(users => {
+			return users
+		})
+}
+
 function handleResponse(response){
 	const authorizationHeader = response.headers.get("Authorization")
 	return response.text().then(text => {
@@ -101,6 +134,13 @@ function handleResponse(response){
 			return {user: data, 
 					accessToken: token}
 		}
+	})
+}
+
+function handleUsersResponse(response){
+	return response.text().then(text => {
+		const data = text && JSON.parse(text)
+		return {users: data}
 	})
 }
 
