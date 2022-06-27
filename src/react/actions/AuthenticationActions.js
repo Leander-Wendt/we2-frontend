@@ -4,6 +4,7 @@ export const AUTHENTICATION_PENDING = "AUTHENTICATION_PENDING"
 export const AUTHENTICATION_SUCCESS = "AUTHENTICATION_SUCCESS"
 export const AUTHENTICATION_ERROR = "AUTHENTICATION_ERROR"
 export const LOGOUT_USER = "LOGOUT_USER"
+export const GET_USERS_PENDING = "GET_USERS_PENDING"
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS"
 
 export function getShowLoginDialogAction(){
@@ -43,6 +44,12 @@ export function getAuthenticationErrorAction(error){
 export function getLogoutUserAction(){
 	return {
 		type: LOGOUT_USER
+	}
+}
+
+export function getUsersPendingAction(){
+	return {
+		type: GET_USERS_PENDING
 	}
 }
 
@@ -90,12 +97,17 @@ function login(userID, password){
 }
 
 export function getUserData(token) {
-	getUsers(token)
-		.then( 
-			data => {
-				const action = getUsersSuccessAction(data)
-				dispatch(action)
-		})
+	console.log("I'm in getUsers")
+	return dispatch => {
+		const pendingAction = getUsersPendingAction()
+		dispatch(pendingAction)
+		getUsers(token)
+			.then( 
+				data => {
+					const action = getUsersSuccessAction(data)
+					dispatch(action)
+				})
+	}
 }
 
 function getUsers(token){
@@ -104,7 +116,7 @@ function getUsers(token){
 		mode: "cors",
 		headers: {
 			'Content-Type': 'application/json',
-			'Authorization': token
+			'authorization': "Basic " + token
 		}
 	}
 	return fetch('https://localhost/users', requestOptions)

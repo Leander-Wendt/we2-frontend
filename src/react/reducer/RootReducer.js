@@ -7,7 +7,8 @@ const initialState = {
 	accessToken: null,
 	isAdministrator: null,
 	users: null,
-	error: null
+	error: null,
+	getUsersPending: false
 }
 
 function rootReducer(state = initialState, action){
@@ -55,9 +56,17 @@ function rootReducer(state = initialState, action){
 				accessToken: null,
 				isAdministrator: null
 			}
-		case authenticationActions.GET_USERS_SUCCESS:
+		case authenticationActions.AUTHENTICATION_PENDING:
 			return {
 				...state,
+				getUsersPending: true,
+				error: null
+		}
+		case authenticationActions.GET_USERS_SUCCESS:
+			console.log(action)
+			return {
+				...state,
+				getUsersPending: false,
 				users: action.users
 			}
 		default:
