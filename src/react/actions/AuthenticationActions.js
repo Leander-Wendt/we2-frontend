@@ -97,7 +97,6 @@ function login(userID, password){
 }
 
 export function getUserData(token) {
-	console.log("I'm in getUsers")
 	return dispatch => {
 		const pendingAction = getUsersPendingAction()
 		dispatch(pendingAction)

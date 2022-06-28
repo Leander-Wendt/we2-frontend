@@ -63,7 +63,6 @@ function rootReducer(state = initialState, action){
 				error: null
 		}
 		case authenticationActions.GET_USERS_SUCCESS:
-			console.log(action)
 			return {
 				...state,
 				getUsersPending: false,
