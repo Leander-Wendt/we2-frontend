@@ -5,6 +5,8 @@ import UserCard from "./UserCard"
 import { bindActionCreators } from 'redux'
 
 import * as authenticationActions from '../../actions/AuthenticationActions'
+import { Row } from "react-bootstrap"
+import { eventWrapper } from "@testing-library/user-event/dist/utils"
 
 const mapStateToProps = state => {
 	return state
@@ -14,30 +16,29 @@ class UserManagementPage extends Component {
 
 	constructor(props){
 		super(props)
+        const {getUsersAction} = this.props
+        this.props.user && getUsersAction(this.props.accessToken)
 	}
 
-    render() {
-        
-        const {getUsersAction} = this.props
-		getUsersAction(this.props.accessToken)
-        console.log(this.props)
+    
 
+    render() { 
+       
+        console.log(this.props.users)
+        console.log(this.props.getUsersPending)
+        console.log(typeof this.props.users)
         let page
         if(this.props.isAdministrator){
             page = <h1>User Management</h1>
         } else {
             page = <Navigate to="/"/>
         }
-        console.log(this.props)
-        if (this.props.user !== null && !this.props.getUsersPending){
-            for (const user of this.props.users){
-                page.append(<UserCard data={user}/>)
-            }
-        }
         return (
             <>
-                <div style={{gap: "2rem"}}>
-                    {page}
+                {page}
+                <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexwrap: "wrap"}}>
+                    
+                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard key={user.userID} data={user}/>)}
                 </div>
             </>            
         )
