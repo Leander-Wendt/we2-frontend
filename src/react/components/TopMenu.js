@@ -17,6 +17,12 @@ class TopMenu extends Component {
 	
 
 	render() {
+		let id
+		if (this.props.accessToken){
+			id = "OpenPrivatePageButton"
+		} else {
+			id = "OpenPublicPageButton"
+		}
 		return (
 			<>
 				<Navbar bg="light" expand="lg" sticky="top">
@@ -27,7 +33,7 @@ class TopMenu extends Component {
 						<Navbar.Toggle aria-controls="basic-navbar-nav" />
 						<Navbar.Collapse id="basic-navbar-nav">
 							<Nav className="me-auto" style={{gap:"1rem"}}>
-								<Link to="/" style={{color:"black", textAlign:"center", textDecoration: "none"}}> Home </Link>
+								<Link to="/" style={{color:"black", textAlign:"center", textDecoration: "none"}} id={id}> Home </Link>
 								{this.props.isAdministrator && <Link id="OpenUserManagementButton" style={{color:"black", textAlign:"center", textDecoration: "none"}} to="/userManagement"> User Management </Link>}
 							</Nav>							
 							<UserSessionWidget />

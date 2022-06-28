@@ -5,7 +5,7 @@ import PublicPage from './react/components/PublicPage'
 import TopMenu from './react/components/TopMenu'
 import PrivatePage from './react/components/PrivatePage'
 import UserManagementPage from './react/components/userManagement/UserManagementPage'
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 
 const mapStateToProps = state => {
 	return state

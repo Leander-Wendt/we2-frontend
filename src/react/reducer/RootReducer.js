@@ -56,7 +56,7 @@ function rootReducer(state = initialState, action){
 				accessToken: null,
 				isAdministrator: null
 			}
-		case authenticationActions.AUTHENTICATION_PENDING:
+		case authenticationActions.GET_USERS_PENDING:
 			return {
 				...state,
 				getUsersPending: true,

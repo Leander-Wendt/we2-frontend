@@ -11,7 +11,6 @@ import thunk from 'redux-thunk'
 import "./css/bootstrap.min.css"
 import { composeWithDevTools } from "redux-devtools-extension"
 
-const initialState = {}
 const middlewares = [thunk]
 
 const store = createStore(rootReducer, composeWithDevTools(

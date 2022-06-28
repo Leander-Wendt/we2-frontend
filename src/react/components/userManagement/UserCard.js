@@ -21,7 +21,7 @@ class UserCard extends Component {
                             <Card.Subtitle className="mb-2 text-muted">Username: {this.props.data.userName}</Card.Subtitle>
                             <Card.Subtitle className="mb-2 text-muted">Is Admin: {this.props.data.isAdministrator ? "Yes" : "No"}</Card.Subtitle>
                             <Card.Link id={"EditButton" + this.props.data.userID} >Edit</Card.Link>
-                            <Card.Link id={"DelteButton" + this.props.data.userID}>Delete</Card.Link>
+                            <Card.Link id={"DeleteButton" + this.props.data.userID}>Delete</Card.Link>
                         </Card.Body>
                     </Card>
             </>            
