@@ -8,10 +8,13 @@ export const GET_USERS_PENDING = "GET_USERS_PENDING"
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS"
 export const CREATE_USER_PENDING = "CREATE_USER_PENDING"
 export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS"
+export const CREATE_USER_FAILURE = "CREATE_USER_FAILURE"
 export const EDIT_USER_PENDING = "EDIT_USER_PENDING"
 export const EDIT_USER_SUCCESS = "EDIT_USER_SUCCESS"
+export const EDIT_USER_FAILURE = "EDIT_USER_SUCCESS"
 export const DELETE_USER_PENDING = "DELETE_USER_PENDING"
 export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS"
+export const DELETE_USER_FAILURE = "DELETEUSER_FAILURE"
 
 export function getShowLoginDialogAction(){
 	return {
@@ -66,37 +69,37 @@ export function getUsersSuccessAction(data){
 	}
 }
 
-export function getCreatePendingAction(){
+export function getUserCreatePendingAction(){
 	return {
 		type: CREATE_USER_PENDING
 	}
 }
 
-export function getCreateSuccessAction(){
+export function getUserCreateSuccessAction(){
 	return {
 		type: CREATE_USER_SUCCESS
 	}
 }
 
-export function getEditPendingAction(){
+export function getUserEditPendingAction(){
 	return {
 		type: EDIT_USER_PENDING
 	}
 }
 
-export function getEditSuccessAction(){
+export function getUserEditSuccessAction(){
 	return {
 		type: EDIT_USER_SUCCESS
 	}
 }
 
-export function getDeletePendingAction(){
+export function getUserDeletePendingAction(){
 	return {
 		type: DELETE_USER_PENDING
 	}
 }
 
-export function getDeleteSuccessAction(){
+export function getUserDeleteSuccessAction(){
 	return {
 		type: DELETE_USER_SUCCESS
 	}
@@ -153,12 +156,38 @@ export function getUserData(token) {
 
 export function createUser(token, id, name, pw, isAdmin) {
 	return dispatch => {
-		const pendingAction = getCreatePendingAction()
+		const pendingAction = getUserCreatePendingAction()
 		dispatch(pendingAction)
 		createUserQuery(token, id, name, pw, isAdmin)
 			.then( 
 				() => {
-					const action = getCreateSuccessAction()
+					const action = getUserCreateSuccessAction()
+					dispatch(action)
+				})
+	}
+}
+
+export function deleteUser(token, id) {
+	return dispatch => {
+		const pendingAction = getUserDeletePendingAction()
+		dispatch(pendingAction)
+		deleteUserQuery(token, id)
+			.then( 
+				() => {
+					const action = getUserDeleteSuccessAction()
+					dispatch(action)
+				})
+	}
+}
+
+export function editUser(token, id, name, pw, isAdmin) {
+	return dispatch => {
+		const pendingAction = getUserEditPendingAction()
+		dispatch(pendingAction)
+		editUserQuery(token, id, name, pw, isAdmin)
+			.then( 
+				() => {
+					const action = getUserEditSuccessAction()
 					dispatch(action)
 				})
 	}
@@ -180,7 +209,9 @@ function getUsers(token){
 		})
 }
 
-export function deleteUser(token, id){
+export function deleteUserQuery(token, id){
+	console.log(token)
+	console.log(id)
 	const requestOptions = {
 		method: 'DELETE',
 		mode: "cors",
@@ -196,7 +227,23 @@ export function deleteUser(token, id){
 		})
 }
 
-export function updateUser(token, id, name, pw, isAdmin){
+function editUserQuery(token, id, name, pw, isAdmin){
+	console.log(token)
+	let body
+	if(pw){
+		body = JSON.stringify({
+			"userID": id,
+			"userName": name,
+			"password": pw,
+			"isAdministrator": isAdmin
+		})
+	} else {
+		body = JSON.stringify({
+			"userID": id,
+			"userName": name,
+			"isAdministrator": isAdmin
+		})
+	}
 	const requestOptions = {
 		method: 'PUT',
 		mode: "cors",
@@ -204,14 +251,9 @@ export function updateUser(token, id, name, pw, isAdmin){
 			'Content-Type': 'application/json',
 			'authorization': "Basic " + token
 		},
-		body: JSON.stringify({
-			"userID": id,
-			"userName": name,
-			"password": pw,
-			"isAdministrator": isAdmin
-		})
+		body: body
 	}
-	return fetch('https://localhost/users/', requestOptions)
+	return fetch('https://localhost/users/' + id, requestOptions)
 }
 
 function createUserQuery(token, id, name, pw, isAdmin){

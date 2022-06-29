@@ -22,7 +22,9 @@ class UserManagementPage extends Component {
         this.state = {
             showCreateModal: false,
             showEditModal: false,
-            showDeleteModal: false
+            showDeleteModal: false,
+            deleteID: null,
+            editUser: null
 		}
 
         this.createUser = this.createUser.bind(this);
@@ -37,7 +39,12 @@ class UserManagementPage extends Component {
 
     
 
-    render() { 
+    render() {
+        if (this.props.refresh){
+            const {getUsersAction} = this.props
+            getUsersAction(this.props.accessToken)
+        }
+        
         let page
         if(this.props.isAdministrator){
             page = <h1>User Management</h1>
@@ -45,16 +52,15 @@ class UserManagementPage extends Component {
             page = <Navigate to="/"/>
         }
 
-        console.log(this.state.showCreateModal)
         return (
             <>
                 {page}
                 {this.state.showCreateModal && <AddUserModal accessToken={this.props.accessToken} onClose={this.closeCreateUser}/>}
-                {this.state.showEditModal && <EditUserModal onClose={this.closeEditUser}/>}
-                {this.state.showDeleteModal && <DeleteUserModal onClose={this.closeDeleteUser}/>}
-                <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexwrap: "wrap"}}>
+                {this.state.showEditModal && <EditUserModal user={this.state.editUser} accessToken={this.props.accessToken} onClose={this.closeEditUser}/>}
+                {this.state.showDeleteModal && <DeleteUserModal accessToken={this.props.accessToken} userid={this.state.deleteID} onClose={this.closeDeleteUser}/>}
+                <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
                     <AddUserButton onClick={this.createUser}/>
-                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard id={"UserItemTest" + user.userID} key={user.userID} data={user}/>)}
+                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard id={"UserItemTest" + user.userID} delete={this.deleteUser} edit={this.editUser} key={user.userID} data={user}/>)}
                 </div>
             </>            
         )
@@ -68,20 +74,20 @@ class UserManagementPage extends Component {
         this.setState({showCreateModal: false})
     }
 
-    deleteUser = () => {
-        this.setState({showDeleteModal: true})
+    deleteUser = (id) => {
+        this.setState({showDeleteModal: true, deleteID: id})
     }
 
     closeDeleteUser = () => {
-        this.setState({showDeleteModal: false})
+        this.setState({showDeleteModal: false, deleteID: null})
     }
 
-    editUser = () => {
-        this.setState({showEditModal: true})
+    editUser = (user) => {
+        this.setState({showEditModal: true, editUser: user})
     }
 
     closeEditUser = () => {
-        this.setState({showEditModal: false})
+        this.setState({showEditModal: false, editUser: null})
     }
 
 }

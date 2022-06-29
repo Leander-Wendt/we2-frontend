@@ -10,7 +10,17 @@ class UserCard extends Component {
 
 	constructor(props){
 		super(props)
+        this.handleDelete = this.handleDelete.bind(this);
+        this.handleEdit = this.handleEdit.bind(this);
 	}
+
+    handleDelete = () => {
+        this.props.delete(this.props.data.userID)
+    }
+
+    handleEdit = () => {
+        this.props.edit(this.props.data)
+    }
 
     render() {
         return (
@@ -20,10 +30,10 @@ class UserCard extends Component {
                             <Card.Title>UserID: {this.props.data.userID}</Card.Title>
                             <Card.Subtitle className="mb-2 text-muted">Username: {this.props.data.userName}</Card.Subtitle>
                             <Card.Subtitle className="mb-2 text-muted">Is Admin: {this.props.data.isAdministrator ? "Yes" : "No"}</Card.Subtitle>
-                            <Card.Link id={"EditButton" + this.props.data.userID} >Edit</Card.Link>
-                            <Card.Link id={"DeleteButton" + this.props.data.userID}>Delete</Card.Link>
+                            <Card.Link onClick={this.handleEdit} user={this.props.data} id={"EditButton" + this.props.data.userID}>Edit</Card.Link>
+                            <Card.Link onClick={this.handleDelete} id={"DeleteButton" + this.props.data.userID}>Delete</Card.Link>
                         </Card.Body>
-                    </Card>
+                </Card>
             </>            
         )
     }
