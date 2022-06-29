@@ -125,6 +125,56 @@ function getUsers(token){
 		})
 }
 
+export function deleteUser(token, id){
+	const requestOptions = {
+		method: 'DELETE',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		}
+	}
+	return fetch('https://localhost/users/' + id, requestOptions)
+		.then(handleUsersResponse)
+		.then(users => {
+			return users
+		})
+}
+
+export function updateUser(token, user){
+	const requestOptions = {
+		method: 'PUT',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		},
+
+		body: user
+	}
+	return fetch('https://localhost/users/' + user.userId, requestOptions)
+		.then(handleUsersResponse)
+		.then(users => {
+			return users
+		})
+}
+
+export function createUser(token){
+	const requestOptions = {
+		method: 'POST',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		}
+	}
+	return fetch('https://localhost/users/', requestOptions)
+		.then(handleUsersResponse)
+		.then(users => {
+			return users
+		})
+}
+
 function handleResponse(response){
 	const authorizationHeader = response.headers.get("Authorization")
 	return response.text().then(text => {
