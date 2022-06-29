@@ -16,7 +16,6 @@ class UserSessionWidget extends Component {
 		this.state = {
             show: false,
 			enableBtn: false,
-			enableWarning: false,
 			userID: '',
 			password: ''
 		}
@@ -31,7 +30,7 @@ class UserSessionWidget extends Component {
 	}
 
 	handleClose = () => {
-        this.setState({show: false, userID: "", password: "", enableBtn: false, enableWarning: false})
+        this.setState({show: false, userID: "", password: "", enableBtn: false})
 		const {hideLoginDialogAction} = this.props
 		hideLoginDialogAction()
 	}
@@ -52,7 +51,6 @@ class UserSessionWidget extends Component {
 		const {userID, password} = this.state
 		const {authenticateUserAction} = this.props
 		authenticateUserAction(userID, password)
-		this.setState({enableWarning: true})
 	}
 
 	handleLogout = (e) => {
@@ -97,7 +95,7 @@ class UserSessionWidget extends Component {
 								<Form.Control id="LoginPasswordInput" type="password" name="password" placeholder="Password" onChange={this.handleChange} />
 							</Form.Group>
 						</Form>
-						<p hidden={!this.state.enableWarning} style={{color:"red", textAlign:"center"}}>Eingabedaten sind falsch.</p>
+						{this.props.error && <p style={{color:"red", textAlign:"center"}}>Eingabedaten sind falsch.</p>}
 					</Modal.Body>
 					
 					<Modal.Footer>

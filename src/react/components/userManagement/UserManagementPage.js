@@ -3,6 +3,9 @@ import {connect} from 'react-redux'
 import { Navigate } from 'react-router-dom'
 import UserCard from "./UserCard"
 import { bindActionCreators } from 'redux'
+import AddUserModal from "./AddUserModal"
+import EditUserModal from "./EditUserModal"
+import DeleteUserModal from "./DeleteUserModal"
 
 import * as authenticationActions from '../../actions/AuthenticationActions'
 import AddUserButton from "./AddUserButton"
@@ -15,7 +18,19 @@ class UserManagementPage extends Component {
 
 	constructor(props){
 		super(props)
+
+        this.state = {
+            showCreateModal: false,
+            showEditModal: false,
+            showDeleteModal: false
+		}
+
         this.createUser = this.createUser.bind(this);
+        this.closeCreateUser = this.closeCreateUser.bind(this);
+        this.editUser = this.editUser.bind(this);
+        this.closeEditUser = this.closeEditUser.bind(this);
+        this.deleteUser = this.deleteUser.bind(this);
+        this.closeDeleteUser = this.closeDeleteUser.bind(this);
         const {getUsersAction} = this.props
         this.props.user && getUsersAction(this.props.accessToken)
 	}
@@ -29,9 +44,14 @@ class UserManagementPage extends Component {
         } else {
             page = <Navigate to="/"/>
         }
+
+        console.log(this.state.showCreateModal)
         return (
             <>
                 {page}
+                {this.state.showCreateModal && <AddUserModal accessToken={this.props.accessToken} onClose={this.closeCreateUser}/>}
+                {this.state.showEditModal && <EditUserModal onClose={this.closeEditUser}/>}
+                {this.state.showDeleteModal && <DeleteUserModal onClose={this.closeDeleteUser}/>}
                 <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexwrap: "wrap"}}>
                     <AddUserButton onClick={this.createUser}/>
                     {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard id={"UserItemTest" + user.userID} key={user.userID} data={user}/>)}
@@ -41,7 +61,27 @@ class UserManagementPage extends Component {
     }
 
     createUser = () => {
-        console.log("Click")
+        this.setState({showCreateModal: true})
+    }
+
+    closeCreateUser = () => {
+        this.setState({showCreateModal: false})
+    }
+
+    deleteUser = () => {
+        this.setState({showDeleteModal: true})
+    }
+
+    closeDeleteUser = () => {
+        this.setState({showDeleteModal: false})
+    }
+
+    editUser = () => {
+        this.setState({showEditModal: true})
+    }
+
+    closeEditUser = () => {
+        this.setState({showEditModal: false})
     }
 
 }

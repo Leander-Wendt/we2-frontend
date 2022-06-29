@@ -6,6 +6,12 @@ export const AUTHENTICATION_ERROR = "AUTHENTICATION_ERROR"
 export const LOGOUT_USER = "LOGOUT_USER"
 export const GET_USERS_PENDING = "GET_USERS_PENDING"
 export const GET_USERS_SUCCESS = "GET_USERS_SUCCESS"
+export const CREATE_USER_PENDING = "CREATE_USER_PENDING"
+export const CREATE_USER_SUCCESS = "CREATE_USER_SUCCESS"
+export const EDIT_USER_PENDING = "EDIT_USER_PENDING"
+export const EDIT_USER_SUCCESS = "EDIT_USER_SUCCESS"
+export const DELETE_USER_PENDING = "DELETE_USER_PENDING"
+export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS"
 
 export function getShowLoginDialogAction(){
 	return {
@@ -60,6 +66,42 @@ export function getUsersSuccessAction(data){
 	}
 }
 
+export function getCreatePendingAction(){
+	return {
+		type: CREATE_USER_PENDING
+	}
+}
+
+export function getCreateSuccessAction(){
+	return {
+		type: CREATE_USER_SUCCESS
+	}
+}
+
+export function getEditPendingAction(){
+	return {
+		type: EDIT_USER_PENDING
+	}
+}
+
+export function getEditSuccessAction(){
+	return {
+		type: EDIT_USER_SUCCESS
+	}
+}
+
+export function getDeletePendingAction(){
+	return {
+		type: DELETE_USER_PENDING
+	}
+}
+
+export function getDeleteSuccessAction(){
+	return {
+		type: DELETE_USER_SUCCESS
+	}
+}
+
 export function authenticateUser(userID, password){
 	return dispatch => {
 		dispatch(getAuthenticationPendingAction())
@@ -109,6 +151,19 @@ export function getUserData(token) {
 	}
 }
 
+export function createUser(token, id, name, pw, isAdmin) {
+	return dispatch => {
+		const pendingAction = getCreatePendingAction()
+		dispatch(pendingAction)
+		createUserQuery(token, id, name, pw, isAdmin)
+			.then( 
+				() => {
+					const action = getCreateSuccessAction()
+					dispatch(action)
+				})
+	}
+}
+
 function getUsers(token){
 	const requestOptions = {
 		method: 'GET',
@@ -141,7 +196,7 @@ export function deleteUser(token, id){
 		})
 }
 
-export function updateUser(token, user){
+export function updateUser(token, id, name, pw, isAdmin){
 	const requestOptions = {
 		method: 'PUT',
 		mode: "cors",
@@ -149,30 +204,32 @@ export function updateUser(token, user){
 			'Content-Type': 'application/json',
 			'authorization': "Basic " + token
 		},
-
-		body: user
-	}
-	return fetch('https://localhost/users/' + user.userId, requestOptions)
-		.then(handleUsersResponse)
-		.then(users => {
-			return users
+		body: JSON.stringify({
+			"userID": id,
+			"userName": name,
+			"password": pw,
+			"isAdministrator": isAdmin
 		})
+	}
+	return fetch('https://localhost/users/', requestOptions)
 }
 
-export function createUser(token){
+function createUserQuery(token, id, name, pw, isAdmin){
 	const requestOptions = {
 		method: 'POST',
 		mode: "cors",
 		headers: {
 			'Content-Type': 'application/json',
 			'authorization': "Basic " + token
-		}
+		},
+		body: JSON.stringify({
+			"userID": id,
+			"userName": name,
+			"password": pw,
+			"isAdministrator": isAdmin
+		})
 	}
 	return fetch('https://localhost/users/', requestOptions)
-		.then(handleUsersResponse)
-		.then(users => {
-			return users
-		})
 }
 
 function handleResponse(response){

@@ -4,11 +4,15 @@ const initialState = {
 	user: null,
 	loginPending: false,
 	showLoginDialog: false,
+	pending: false,
 	accessToken: null,
 	isAdministrator: null,
 	users: null,
 	error: null,
-	getUsersPending: false
+	getUsersPending: false,
+	editUserPending: false,
+	deleteUserPending: false,
+	createUserPending: false
 }
 
 function rootReducer(state = initialState, action){
@@ -67,7 +71,37 @@ function rootReducer(state = initialState, action){
 				...state,
 				getUsersPending: false,
 				users: action.users
-			}
+		}
+		case authenticationActions.CREATE_USER_PENDING:
+			return {
+				...state,
+				createUserPending: true
+		}
+		case authenticationActions.CREATE_USER_SUCCESS:
+			return {
+				...state,
+				createUserPending: false
+		}
+		case authenticationActions.DELETE_USER_PENDING:
+			return {
+				...state,
+				deleteUserPending: true
+		}
+		case authenticationActions.DELETE_USER_SUCCESS:
+			return {
+				...state,
+				deleteUserPending: false
+		}
+		case authenticationActions.EDIT_USER_PENDING:
+			return {
+				...state,
+				editUserPending: true
+		}
+		case authenticationActions.EDIT_USER_SUCCESS:
+			return {
+				...state,
+				editUserPending: false
+		}
 		default:
 			return state
 	}
