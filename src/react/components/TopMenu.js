@@ -35,6 +35,7 @@ class TopMenu extends Component {
 							<Nav className="me-auto" style={{gap:"1rem"}}>
 								<Link to="/" style={{color:"black", textAlign:"center", textDecoration: "none"}} id={id}> Home </Link>
 								{this.props.isAdministrator && <Link id="OpenUserManagementButton" style={{color:"black", textAlign:"center", textDecoration: "none"}} to="/userManagement"> User Management </Link>}
+								{this.props.accessToken && <Link id="OpenForumThreadOverviewButton" style={{color:"black", textAlign:"center", textDecoration: "none"}} to="/forumPage"> Foren </Link>}
 							</Nav>							
 							<UserSessionWidget />
 						</Navbar.Collapse>

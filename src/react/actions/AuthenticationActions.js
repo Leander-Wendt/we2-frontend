@@ -14,7 +14,25 @@ export const EDIT_USER_SUCCESS = "EDIT_USER_SUCCESS"
 export const EDIT_USER_FAILURE = "EDIT_USER_SUCCESS"
 export const DELETE_USER_PENDING = "DELETE_USER_PENDING"
 export const DELETE_USER_SUCCESS = "DELETE_USER_SUCCESS"
-export const DELETE_USER_FAILURE = "DELETEUSER_FAILURE"
+export const DELETE_USER_FAILURE = "DELETE_USER_FAILURE"
+
+export const GET_THREADS_PENDING = "GET_THREADS_PENDING"
+export const GET_THREADS_SUCCESS = "GET_THREADS_SUCCESS"
+export const CREATE_THREAD_PENDING = "CREATE_THREAD_PENDING"
+export const CREATE_THREAD_SUCCESS = "CREATE_THREAD_SUCCESS"
+export const CREATE_THREAD_FAILURE = "CREATE_THREAD_FAILURE"
+export const EDIT_THREAD_PENDING = "EDIT_THREAD_PENDING"
+export const EDIT_THREAD_SUCCESS = "EDIT_THREAD_SUCCESS"
+export const EDIT_THREAD_FAILURE = "EDIT_THREAD_SUCCESS"
+export const DELETE_THREAD_PENDING = "DELETE_THREAD_PENDING"
+export const DELETE_THREAD_SUCCESS = "DELETE_THREAD_SUCCESS"
+export const DELETE_THREAD_FAILURE = "DELETE_THREAD_FAILURE"
+
+export const GET_MESSAGES_PENDING = "GET_MESSAGES_PENDING"
+export const GET_MESSAGES_SUCCESS = "GET_MESSAGES_SUCCESS"
+export const CREATE_MESSAGE_PENDING = "CREATE_MESSAGE_PENDING"
+export const CREATE_MESSAGE_SUCCESS = "CREATE_MESSAGE_SUCCESS"
+export const CREATE_MESSAGE_FAILURE = "CREATE_MESSAGE_FAILURE"
 
 export function getShowLoginDialogAction(){
 	return {
@@ -102,6 +120,55 @@ export function getUserDeletePendingAction(){
 export function getUserDeleteSuccessAction(){
 	return {
 		type: DELETE_USER_SUCCESS
+	}
+}
+
+export function getThreadsPendingAction(){
+	return {
+		type: GET_THREADS_PENDING
+	}
+}
+
+export function getThreadsSuccessAction(data){
+	return {
+		type: GET_THREADS_SUCCESS,
+		users: data
+	}
+}
+
+export function getThreadCreatePendingAction(){
+	return {
+		type: CREATE_THREAD_PENDING
+	}
+}
+
+export function getThreadCreateSuccessAction(){
+	return {
+		type: CREATE_THREAD_SUCCESS
+	}
+}
+
+export function getThreadEditPendingAction(){
+	return {
+		type: EDIT_THREAD_PENDING
+	}
+}
+
+export function getThreadEditSuccessAction(){
+	return {
+		type: EDIT_THREAD_SUCCESS
+	}
+}
+
+export function getThreadDeletePendingAction(){
+	return {
+		type: DELETE_THREAD_PENDING
+	}
+}
+
+export function getThreadDeleteSuccessAction(){
+	return {
+		type: DELETE_THREAD_SUCCESS
 	}
 }
 
@@ -209,9 +276,121 @@ function getUsers(token){
 		})
 }
 
+export function getThreads() {
+	return dispatch => {
+		const pendingAction = getThreadsPendingAction()
+		dispatch(pendingAction)
+		getThreadsQuery()
+			.then( 
+				data => {
+					const action = getThreadsSuccessAction(data)
+					dispatch(action)
+				})
+	}
+}
+
+function getThreadsQuery(){
+	const requestOptions = {
+		method: 'GET',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}
+	return fetch('https://localhost/forumThreads', requestOptions)
+		.then(handleUsersResponse)
+		.then(threads => {
+			return threads
+		})
+}
+
+export function createThread(token, thread) {
+	return dispatch => {
+		const pendingAction = createThreadPendingAction()
+		dispatch(pendingAction)
+		createThreadQuery(token, thread)
+			.then( 
+				() => {
+					const action = createThreadSuccessAction()
+					dispatch(action)
+				})
+	}
+}
+
+function createThreadQuery(token, thread){
+	const requestOptions = {
+		method: 'POST',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		},
+		body: JSON.stringify({
+			"name": thread.name,
+			"description": thread.description,
+			"ownerID": thread.ownerID
+		})
+	}
+	return fetch('https://localhost/forumThreads', requestOptions)
+}
+
+export function getThreads() {
+	return dispatch => {
+		const pendingAction = getThreadsPendingAction()
+		dispatch(pendingAction)
+		getThreadsQuery()
+			.then( 
+				data => {
+					const action = getThreadsSuccessAction(data)
+					dispatch(action)
+				})
+	}
+}
+
+function getThreadsQuery(){
+	const requestOptions = {
+		method: 'GET',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}
+	return fetch('https://localhost/forumThreads', requestOptions)
+		.then(handleUsersResponse)
+		.then(threads => {
+			return threads
+		})
+}
+
+export function getThreads() {
+	return dispatch => {
+		const pendingAction = getThreadsPendingAction()
+		dispatch(pendingAction)
+		getThreadsQuery()
+			.then( 
+				data => {
+					const action = getThreadsSuccessAction(data)
+					dispatch(action)
+				})
+	}
+}
+
+function getThreadsQuery(){
+	const requestOptions = {
+		method: 'GET',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}
+	return fetch('https://localhost/forumThreads', requestOptions)
+		.then(handleUsersResponse)
+		.then(threads => {
+			return threads
+		})
+}
+
 export function deleteUserQuery(token, id){
-	console.log(token)
-	console.log(id)
 	const requestOptions = {
 		method: 'DELETE',
 		mode: "cors",
@@ -228,7 +407,6 @@ export function deleteUserQuery(token, id){
 }
 
 function editUserQuery(token, id, name, pw, isAdmin){
-	console.log(token)
 	let body
 	if(pw){
 		body = JSON.stringify({

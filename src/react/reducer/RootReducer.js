@@ -13,6 +13,15 @@ const initialState = {
 	editUserPending: false,
 	deleteUserPending: false,
 	createUserPending: false,
+	getThreadsPending: false,
+	editThreadPending: false,
+	deleteThreadPending: false,
+	createThreadPending: false,
+	getMessagesPending: false,
+	editMessagesPending: false,
+	deleteMessagePending: false,
+	threads: null,
+	messages: null,
 	refresh: false
 }
 
@@ -107,6 +116,77 @@ function rootReducer(state = initialState, action){
 				editUserPending: false,
 				refresh: true
 		}
+	case authenticationActions.GET_THREADS_PENDING:
+		return {
+			...state,
+			getThreadsPending: true,
+			error: null
+	}
+	case authenticationActions.GET_THREADS_SUCCESS:
+		return {
+			...state,
+			getThreadsPending: false,
+			threads: action.threads,
+			refresh: false
+	}
+	case authenticationActions.CREATE_THREAD_PENDING:
+		return {
+			...state,
+			createThreadPending: true
+	}
+	case authenticationActions.CREATE_THREAD_SUCCESS:
+		return {
+			...state,
+			createThreadPending: false,
+			refresh: true
+	}
+	case authenticationActions.DELETE_THREAD_PENDING:
+		return {
+			...state,
+			deleteThreadPending: true
+	}
+	case authenticationActions.DELETE_THREAD_SUCCESS:
+		return {
+			...state,
+			deleteThreadPending: false,
+			refresh: true
+	}
+	case authenticationActions.EDIT_THREAD_PENDING:
+		return {
+			...state,
+			editThreadPending: true
+	}
+	case authenticationActions.EDIT_THREAD_SUCCESS:
+		return {
+			...state,
+			editThreadPending: false,
+			refresh: true
+	}
+	case authenticationActions.GET_MESSAGES_PENDING:
+		return {
+			...state,
+			getMessagesPending: true,
+			error: null
+	}
+	case authenticationActions.GET_MESSAGES_SUCCESS:
+		return {
+			...state,
+			getMessagesPending: false,
+			messages: action.messages,
+			refresh: false
+	}
+	case authenticationActions.DELETE_MESSAGE_PENDING:
+		return {
+			...state,
+			deleteMessagePending: true,
+			error: null
+	}
+	case authenticationActions.DELETE_THREADS_SUCCESS:
+		return {
+			...state,
+			deleteMessagePending: false,
+			refresh: true
+	}
 		default:
 			return state
 	}
