@@ -10,7 +10,7 @@ class EditUserModal extends Component {
 	constructor(props){
 		super(props)
 		this.state = {
-			enableBtn: false,
+			enableBtn: true,
 			userID: this.props.user.userID,
             userName: this.props.user.userName,
 			password: '',
@@ -21,7 +21,13 @@ class EditUserModal extends Component {
 
 	handleChange = (e) => {
 		const {name, value} = e.target
-		this.setState({[name]: value})			
+		this.setState({[name]: value}, () => {
+			if(this.state.userID.trim() && this.state.userName.trim()){
+				this.setState({enableBtn: true})
+			} else {
+				this.setState({enableBtn: false})
+			}	
+		})				
 	}
 
     handleToggle = () => {

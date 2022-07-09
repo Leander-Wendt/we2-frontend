@@ -132,7 +132,7 @@ export function getThreadsPendingAction(){
 export function getThreadsSuccessAction(data){
 	return {
 		type: GET_THREADS_SUCCESS,
-		users: data
+		threads: data
 	}
 }
 
@@ -169,6 +169,31 @@ export function getThreadDeletePendingAction(){
 export function getThreadDeleteSuccessAction(){
 	return {
 		type: DELETE_THREAD_SUCCESS
+	}
+}
+
+export function getMessagesPendingAction(){
+	return {
+		type: GET_MESSAGES_PENDING
+	}
+}
+
+export function getMessagesSuccessAction(data){
+	return {
+		type: GET_MESSAGES_SUCCESS,
+		users: data
+	}
+}
+
+export function getMessageCreatePendingAction(){
+	return {
+		type: CREATE_MESSAGE_PENDING
+	}
+}
+
+export function getMessageCreateSuccessAction(){
+	return {
+		type: CREATE_MESSAGE_SUCCESS
 	}
 }
 
@@ -298,7 +323,7 @@ function getThreadsQuery(){
 		}
 	}
 	return fetch('https://localhost/forumThreads', requestOptions)
-		.then(handleUsersResponse)
+		.then(handleGenericResponse)
 		.then(threads => {
 			return threads
 		})
@@ -306,12 +331,12 @@ function getThreadsQuery(){
 
 export function createThread(token, thread) {
 	return dispatch => {
-		const pendingAction = createThreadPendingAction()
+		const pendingAction = getThreadCreatePendingAction()
 		dispatch(pendingAction)
 		createThreadQuery(token, thread)
 			.then( 
 				() => {
-					const action = createThreadSuccessAction()
+					const action = getThreadCreateSuccessAction()
 					dispatch(action)
 				})
 	}
@@ -334,60 +359,61 @@ function createThreadQuery(token, thread){
 	return fetch('https://localhost/forumThreads', requestOptions)
 }
 
-export function getThreads() {
+export function updateThread(token, id, thread) {
 	return dispatch => {
-		const pendingAction = getThreadsPendingAction()
+		const pendingAction = getThreadEditPendingAction()
 		dispatch(pendingAction)
-		getThreadsQuery()
+		updateThreadQuery(token, id, thread)
 			.then( 
-				data => {
-					const action = getThreadsSuccessAction(data)
+				() => {
+					const action = getThreadEditSuccessAction()
 					dispatch(action)
 				})
 	}
 }
 
-function getThreadsQuery(){
+function updateThreadQuery(token, thread){
+	console.log(thread)
 	const requestOptions = {
-		method: 'GET',
+		method: 'PUT',
 		mode: "cors",
 		headers: {
-			'Content-Type': 'application/json'
-		}
-	}
-	return fetch('https://localhost/forumThreads', requestOptions)
-		.then(handleUsersResponse)
-		.then(threads => {
-			return threads
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		},
+		body: JSON.stringify({
+			"name": thread.name,
+			"description": thread.description
+			//"ownerID": thread.ownerID
 		})
+	}
+	return fetch('https://localhost/forumThreads/' + thread._id, requestOptions)
 }
 
-export function getThreads() {
+export function deleteThread(token, id) {
 	return dispatch => {
-		const pendingAction = getThreadsPendingAction()
+		const pendingAction = getThreadDeletePendingAction()
 		dispatch(pendingAction)
-		getThreadsQuery()
+		deleteThreadQuery(token, id)
 			.then( 
-				data => {
-					const action = getThreadsSuccessAction(data)
+				() => {
+					const action = getThreadDeleteSuccessAction()
 					dispatch(action)
 				})
 	}
 }
 
-function getThreadsQuery(){
+function deleteThreadQuery(token, id){
+	console.log(id, token)
 	const requestOptions = {
-		method: 'GET',
+		method: 'DELETE',
 		mode: "cors",
 		headers: {
-			'Content-Type': 'application/json'
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
 		}
 	}
-	return fetch('https://localhost/forumThreads', requestOptions)
-		.then(handleUsersResponse)
-		.then(threads => {
-			return threads
-		})
+	return fetch('https://localhost/forumThreads/' + id, requestOptions)
 }
 
 export function deleteUserQuery(token, id){
@@ -400,10 +426,6 @@ export function deleteUserQuery(token, id){
 		}
 	}
 	return fetch('https://localhost/users/' + id, requestOptions)
-		.then(handleUsersResponse)
-		.then(users => {
-			return users
-		})
 }
 
 function editUserQuery(token, id, name, pw, isAdmin){
@@ -452,16 +474,74 @@ function createUserQuery(token, id, name, pw, isAdmin){
 	return fetch('https://localhost/users/', requestOptions)
 }
 
+export function getMessages(threadID) {
+	return dispatch => {
+		const pendingAction = getMessagesPendingAction()
+		dispatch(pendingAction)
+		getMessagesQuery(threadID)
+			.then( 
+				data => {
+					const action = getMessagesSuccessAction(data)
+					dispatch(action)
+				})
+	}
+}
+
+function getMessagesQuery(threadID){
+	const requestOptions = {
+		method: 'GET',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json'
+		}
+	}
+	return fetch('https://localhost/forumMessages?forumThreadID=' + threadID, requestOptions)
+		.then(handleGenericResponse)
+		.then(messages => {
+			return messages
+		})
+}
+
+export function createMessage(token, userID, threadID, message) {
+	return dispatch => {
+		const pendingAction = getMessageCreatePendingAction()
+		dispatch(pendingAction)
+		createMessageQuery(token, userID, threadID, message)
+			.then( 
+				() => {
+					const action = getMessageCreateSuccessAction()
+					dispatch(action)
+				})
+	}
+}
+
+function createMessageQuery(token, userID, threadID, message){
+	const requestOptions = {
+		method: 'POST',
+		mode: "cors",
+		headers: {
+			'Content-Type': 'application/json',
+			'authorization': "Basic " + token
+		},
+		body: JSON.stringify({
+			"forumThradID": threadID,
+			"title": message.title,
+			"text": message.text,
+			"authorID": userID
+		})
+	}
+	return fetch('https://localhost/forumMessages', requestOptions)
+}
+
 function handleResponse(response){
 	const authorizationHeader = response.headers.get("Authorization")
-	return response.text().then(text => {
+	return response.text().then(() => {
 
 		let token
-		const data = text && JSON.parse(text)
 		if(authorizationHeader){
 			token = authorizationHeader.split(" ")[1]
 		}
-
+		let payload = parseJWT(token)
 		if(!response.ok){
 			if(response.status === 401){
 				logout()
@@ -469,7 +549,7 @@ function handleResponse(response){
 			const error = response.statusText
 			return Promise.reject(error)
 		} else {
-			return {user: data, 
+			return {user: payload, 
 					accessToken: token}
 		}
 	})
@@ -482,8 +562,18 @@ function handleUsersResponse(response){
 	})
 }
 
+function handleGenericResponse(response){
+	return response.text().then(text => {
+		return text && JSON.parse(text)
+	})
+}
+
 function logout(){
 	return dispatch => {
 		dispatch(getLogoutUserAction())
 	}
+}
+
+function parseJWT(token){
+	return JSON.parse(atob(token.split('.')[1]))
 }

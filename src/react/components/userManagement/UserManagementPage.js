@@ -60,7 +60,7 @@ class UserManagementPage extends Component {
                 {this.state.showDeleteModal && <DeleteUserModal accessToken={this.props.accessToken} userid={this.state.deleteID} onClose={this.closeDeleteUser}/>}
                 <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
                     <AddUserButton onClick={this.createUser}/>
-                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard id={"UserItemTest" + user.userID} delete={this.deleteUser} edit={this.editUser} key={user.userID} data={user}/>)}
+                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard delete={this.deleteUser} edit={this.editUser} key={user.userID} data={user}/>)}
                 </div>
             </>            
         )

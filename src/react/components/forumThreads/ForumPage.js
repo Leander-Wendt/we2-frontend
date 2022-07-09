@@ -1,14 +1,14 @@
 import React, { Component } from "react"
 import {connect} from 'react-redux'
 import { Navigate } from 'react-router-dom'
-import UserCard from "../userManagement/UserCard"
+import ThreadCard from "./ThreadCard"
 import { bindActionCreators } from 'redux'
-import AddUserModal from "../userManagement/AddUserModal"
-import EditUserModal from "../userManagement/EditUserModal"
-import DeleteUserModal from "../userManagement/DeleteUserModal"
+import AddThreadModal from "./AddThreadModal"
+import EditThreadModal from "./EditThreadModal"
+import DeleteThreadModal from "./DeleteThreadModal"
 
 import * as authenticationActions from '../../actions/AuthenticationActions'
-import AddUserButton from "../userManagement/AddUserButton"
+import AddThreadButton from "./AddThreadButton"
 
 const mapStateToProps = state => {
 	return state
@@ -24,69 +24,68 @@ class ForumPage extends Component {
             showEditModal: false,
             showDeleteModal: false,
             deleteID: null,
-            editUser: null
+            editThread: null
 		}
 
-        this.createUser = this.createUser.bind(this);
-        this.closeCreateUser = this.closeCreateUser.bind(this);
-        this.editUser = this.editUser.bind(this);
-        this.closeEditUser = this.closeEditUser.bind(this);
-        this.deleteUser = this.deleteUser.bind(this);
-        this.closeDeleteUser = this.closeDeleteUser.bind(this);
-        const {getUsersAction} = this.props
-        this.props.user && getUsersAction(this.props.accessToken)
+        this.createThread = this.createThread.bind(this);
+        this.closeCreateThread = this.closeCreateThread.bind(this);
+        this.editThread = this.editThread.bind(this);
+        this.closeEditThread = this.closeEditThread.bind(this);
+        this.deleteThread = this.deleteThread.bind(this);
+        this.closeDeleteThread = this.closeDeleteThread.bind(this);
+        const {getThreadsAction} = this.props
+        this.props.user && getThreadsAction(this.props.accessToken)
 	}
 
     
 
     render() {
         if (this.props.refresh){
-            const {getUsersAction} = this.props
-            getUsersAction(this.props.accessToken)
+            const {getThreadsAction} = this.props
+            getThreadsAction()
         }
         
         let page
         if(this.props.isAdministrator){
-            page = <h1>User Management</h1>
+            page = <h1>Forum Threads</h1>
         } else {
             page = <Navigate to="/"/>
         }
-
         return (
             <>
                 {page}
-                {this.state.showCreateModal && <AddUserModal accessToken={this.props.accessToken} onClose={this.closeCreateUser}/>}
-                {this.state.showEditModal && <EditUserModal user={this.state.editUser} accessToken={this.props.accessToken} onClose={this.closeEditUser}/>}
-                {this.state.showDeleteModal && <DeleteUserModal accessToken={this.props.accessToken} userid={this.state.deleteID} onClose={this.closeDeleteUser}/>}
-                <div style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
-                    <AddUserButton onClick={this.createUser}/>
-                    {(!this.props.getUsersPending && this.props.users && this.props.users.users) && this.props.users.users.map( user => <UserCard id={"UserItemTest" + user.userID} delete={this.deleteUser} edit={this.editUser} key={user.userID} data={user}/>)}
+                {this.state.showCreateModal && <AddThreadModal accessToken={this.props.accessToken} ownerID={this.props.userID} onClose={this.closeCreateThread}/>}
+                {this.state.showEditModal && <EditThreadModal thread={this.state.editThread} accessToken={this.props.accessToken} onClose={this.closeEditThread}/>}
+                {this.state.showDeleteModal && <DeleteThreadModal accessToken={this.props.accessToken} id={this.state.deleteID} onClose={this.closeDeleteThread}/>}
+                <div id="ForumThreadList" style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
+                    <AddThreadButton onClick={this.createThread}/>
+                    {(!this.props.getThreadsPending && this.props.threads) && this.props.threads.map( thread => <ThreadCard id={"ForumThread" + thread._id} delete={this.deleteThread} edit={this.editThread} key={thread._id} data={thread}/>)}
                 </div>
             </>            
         )
     }
 
-    createUser = () => {
+    createThread = () => {
         this.setState({showCreateModal: true})
     }
 
-    closeCreateUser = () => {
+    closeCreateThread = () => {
         this.setState({showCreateModal: false})
     }
 
-    deleteUser = (id) => {
+    deleteThread = (id) => {
         this.setState({showDeleteModal: true, deleteID: id})
     }
 
-    closeDeleteUser = () => {
+    closeDeleteThread = () => {
         this.setState({showDeleteModal: false, deleteID: null})
     }
 
-    editUser = (user) => {
-        this.setState({showEditModal: true, editUser: user})
+    editThread = (thread) => {
+        this.setState({showEditModal: true, editThread: thread})
     }
 
-    closeEditUser = () => {
+    closeEditThread = () => {
         this.setState({showEditModal: false, editUser: null})
     }
 
@@ -95,7 +94,7 @@ class ForumPage extends Component {
 
 
 const mapDispatchToProps = dispatch => bindActionCreators({
-	getUsersAction: authenticationActions.getUserData
+	getThreadsAction: authenticationActions.getThreads
 }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(ForumPage)

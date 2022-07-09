@@ -175,13 +175,18 @@ function rootReducer(state = initialState, action){
 			messages: action.messages,
 			refresh: false
 	}
-	case authenticationActions.DELETE_MESSAGE_PENDING:
+	case authenticationActions.CREATE_MESSAGE_PENDING:
 		return {
 			...state,
-			deleteMessagePending: true,
+			createMessagePending: true
+	}
+	case authenticationActions.CREATE_MESSAGE_SUCCESS:
+		return {
+			...state,
+			createMessagePending: false,
 			error: null
 	}
-	case authenticationActions.DELETE_THREADS_SUCCESS:
+	case authenticationActions.DELETE_THREAD_SUCCESS:
 		return {
 			...state,
 			deleteMessagePending: false,
