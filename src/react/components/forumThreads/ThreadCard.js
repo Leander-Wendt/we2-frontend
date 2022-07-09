@@ -7,11 +7,6 @@ const mapStateToProps = state => {
 }
 
 class ThreadCard extends Component {
-
-	constructor(props){
-		super(props)
-	}
-
     render() {
         return (
             <>
@@ -22,6 +17,7 @@ class ThreadCard extends Component {
                             <Card.Subtitle className="mb-2 text-muted">{this.props.data.description}</Card.Subtitle>
                             <Card.Link onClick={() => {this.props.edit(this.props.data)}} user={this.props.data} id={"EditForumThreadButton" + this.props.data._id}>Edit</Card.Link>
                             <Card.Link onClick={() => {this.props.delete(this.props.data._id)}} id={"DeleteForumThreadButton" + this.props.data._id}>Delete</Card.Link>
+                            <Card.Link onClick={() => {this.props.showMessages(this.props.data._id)}} id={"ViewForumThreadButton" + this.props.data._id}>Messages</Card.Link>
                         </Card.Body>
                 </Card>
             </>            

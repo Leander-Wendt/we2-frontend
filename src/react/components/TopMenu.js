@@ -10,12 +10,6 @@ const mapStateToProps = state => {
 }
 
 class TopMenu extends Component {
-
-	constructor(props){
-		super(props)
-	}
-	
-
 	render() {
 		let id
 		if (this.props.accessToken){

@@ -181,7 +181,7 @@ export function getMessagesPendingAction(){
 export function getMessagesSuccessAction(data){
 	return {
 		type: GET_MESSAGES_SUCCESS,
-		users: data
+		messages: data
 	}
 }
 
@@ -359,11 +359,11 @@ function createThreadQuery(token, thread){
 	return fetch('https://localhost/forumThreads', requestOptions)
 }
 
-export function updateThread(token, id, thread) {
+export function updateThread(token, thread) {
 	return dispatch => {
 		const pendingAction = getThreadEditPendingAction()
 		dispatch(pendingAction)
-		updateThreadQuery(token, id, thread)
+		updateThreadQuery(token, thread)
 			.then( 
 				() => {
 					const action = getThreadEditSuccessAction()
@@ -373,7 +373,6 @@ export function updateThread(token, id, thread) {
 }
 
 function updateThreadQuery(token, thread){
-	console.log(thread)
 	const requestOptions = {
 		method: 'PUT',
 		mode: "cors",
@@ -384,7 +383,6 @@ function updateThreadQuery(token, thread){
 		body: JSON.stringify({
 			"name": thread.name,
 			"description": thread.description
-			//"ownerID": thread.ownerID
 		})
 	}
 	return fetch('https://localhost/forumThreads/' + thread._id, requestOptions)
@@ -404,7 +402,6 @@ export function deleteThread(token, id) {
 }
 
 function deleteThreadQuery(token, id){
-	console.log(id, token)
 	const requestOptions = {
 		method: 'DELETE',
 		mode: "cors",
@@ -502,11 +499,11 @@ function getMessagesQuery(threadID){
 		})
 }
 
-export function createMessage(token, userID, threadID, message) {
+export function createMessage(token, message) {
 	return dispatch => {
 		const pendingAction = getMessageCreatePendingAction()
 		dispatch(pendingAction)
-		createMessageQuery(token, userID, threadID, message)
+		createMessageQuery(token, message)
 			.then( 
 				() => {
 					const action = getMessageCreateSuccessAction()
@@ -515,7 +512,8 @@ export function createMessage(token, userID, threadID, message) {
 	}
 }
 
-function createMessageQuery(token, userID, threadID, message){
+function createMessageQuery(token, message){
+	console.log(message, "hey")
 	const requestOptions = {
 		method: 'POST',
 		mode: "cors",
@@ -524,10 +522,10 @@ function createMessageQuery(token, userID, threadID, message){
 			'authorization': "Basic " + token
 		},
 		body: JSON.stringify({
-			"forumThradID": threadID,
+			"forumThreadID": message.forumThreadID,
 			"title": message.title,
 			"text": message.text,
-			"authorID": userID
+			"authorID": message.authorID
 		})
 	}
 	return fetch('https://localhost/forumMessages', requestOptions)

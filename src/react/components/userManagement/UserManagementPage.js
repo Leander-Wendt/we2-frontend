@@ -24,7 +24,7 @@ class UserManagementPage extends Component {
             showEditModal: false,
             showDeleteModal: false,
             deleteID: null,
-            editUser: null
+            editUser: null,
 		}
 
         this.createUser = this.createUser.bind(this);
@@ -89,7 +89,6 @@ class UserManagementPage extends Component {
     closeEditUser = () => {
         this.setState({showEditModal: false, editUser: null})
     }
-
 }
 
 

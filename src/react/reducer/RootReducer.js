@@ -145,12 +145,6 @@ function rootReducer(state = initialState, action){
 			...state,
 			deleteThreadPending: true
 	}
-	case authenticationActions.DELETE_THREAD_SUCCESS:
-		return {
-			...state,
-			deleteThreadPending: false,
-			refresh: true
-	}
 	case authenticationActions.EDIT_THREAD_PENDING:
 		return {
 			...state,
@@ -184,7 +178,8 @@ function rootReducer(state = initialState, action){
 		return {
 			...state,
 			createMessagePending: false,
-			error: null
+			error: null,
+			refresh: true
 	}
 	case authenticationActions.DELETE_THREAD_SUCCESS:
 		return {
