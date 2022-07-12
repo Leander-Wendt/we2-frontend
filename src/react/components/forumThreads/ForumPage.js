@@ -77,15 +77,15 @@ class ForumPage extends Component {
                 {this.state.showEditModal && <EditThreadModal thread={this.state.editThread} accessToken={this.props.accessToken} onClose={this.closeEditThread}/>}
                 {this.state.showDeleteModal && <DeleteThreadModal accessToken={this.props.accessToken} id={this.state.deleteID} onClose={this.closeDeleteThread}/>}              
                 {this.state.showCreateMessageModal && <AddMessageModal authorID={this.props.user.userID} accessToken={this.props.accessToken} threadID={this.state.threadID} onClose={this.closeAddMessage}/>}
-                <div hidden={this.state.showMessages} id="ForumThreadList" style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
+                {!this.state.showMessages && <div id="ForumThreadList" style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
                     <AddThreadButton onClick={this.createThread}/>
                     {(!this.props.getThreadsPending && this.props.threads) && this.props.threads.map( thread => <ThreadCard id={"ForumThread" + thread._id} showMessages={this.showMessages} delete={this.deleteThread} edit={this.editThread} key={thread._id} data={thread}/>)}
-                </div>                
-                <div hidden={!this.state.showMessages} style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
+                </div> }               
+                {this.state.showMessages && <div id="ForumMessageList" style={{padding: "2rem", gap: "2rem", display: "flex", flexdirection: "row", flexWrap: "wrap"}}>
                     {this.state.showMessages && <ShowThreadsButton onClick={this.showThreads}/>}  
                     <AddMessageButton threadID={this.state.threadID} onClick={this.showAddMessage}/>
                     {(!this.props.getMessagesPending && this.state.showMessages && this.props.messages) && this.props.messages.map( message => <MessageCard id={"ForumMessage" + message._id} key={message._id} data={message}/>)}
-                </div>
+                </div>}
             </>            
         )
     }

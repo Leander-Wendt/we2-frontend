@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import './App.css'
-import PublicPage from './react/components/PublicPage'
-import TopMenu from './react/components/TopMenu'
-import PrivatePage from './react/components/PrivatePage'
+import PublicPage from './react/components/landingPages/PublicPage'
+import TopMenu from './react/components/topMenu/TopMenu'
+import PrivatePage from './react/components/landingPages/PrivatePage'
 import UserManagementPage from './react/components/userManagement/UserManagementPage'
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import ForumPage from "./react/components/forumThreads/ForumPage"

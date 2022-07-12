@@ -15,7 +15,6 @@ class DeleteUserModal extends Component {
 	}
 
 	render(){
-        console.log(this.props)
 		return(
 			<>
 				<Modal onHide={this.props.onClose} show={true} centered>

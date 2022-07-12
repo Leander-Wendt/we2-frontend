@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import {Button} from 'react-bootstrap'
-import { getShowLoginDialogAction } from '../actions/AuthenticationActions'
+import { getShowLoginDialogAction } from '../../actions/AuthenticationActions'
 import {connect} from "react-redux"
 
 class LoginButton extends Component {

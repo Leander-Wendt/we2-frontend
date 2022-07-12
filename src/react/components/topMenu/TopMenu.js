@@ -2,7 +2,7 @@ import React, { Component } from "react"
 import { Navbar, Container, Nav } from "react-bootstrap"
 import UserSessionWidget from './UserSessionWidget'
 import {connect} from 'react-redux'
-import Engi from "../../images/Engi.png";
+import Engi from "../../../images/Engi.png";
 import {Link} from "react-router-dom"
 
 const mapStateToProps = state => {

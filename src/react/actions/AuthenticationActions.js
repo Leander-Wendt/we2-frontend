@@ -1,3 +1,5 @@
+import config from "../../config.json"
+
 export const SHOW_LOGIN_DIALOG = "SHOW_LOGIN_DIALOG"
 export const HIDE_LOGIN_DIALOG = "HIDE_LOGIN_DIALOG"
 export const AUTHENTICATION_PENDING = "AUTHENTICATION_PENDING"
@@ -33,6 +35,7 @@ export const GET_MESSAGES_SUCCESS = "GET_MESSAGES_SUCCESS"
 export const CREATE_MESSAGE_PENDING = "CREATE_MESSAGE_PENDING"
 export const CREATE_MESSAGE_SUCCESS = "CREATE_MESSAGE_SUCCESS"
 export const CREATE_MESSAGE_FAILURE = "CREATE_MESSAGE_FAILURE"
+
 
 export function getShowLoginDialogAction(){
 	return {
@@ -226,7 +229,7 @@ function login(userID, password){
 			'authorization': 'Basic ' + credentials
 		}
 	}
-	return fetch('https://localhost/authenticate', requestOptions)
+	return fetch(config.URL +'/authenticate', requestOptions)
 		.then(handleResponse)
 		.then(userSession => {
 			return userSession
@@ -294,7 +297,7 @@ function getUsers(token){
 			'authorization': "Basic " + token
 		}
 	}
-	return fetch('https://localhost/users', requestOptions)
+	return fetch(config.URL + '/users', requestOptions)
 		.then(handleUsersResponse)
 		.then(users => {
 			return users
@@ -322,7 +325,7 @@ function getThreadsQuery(){
 			'Content-Type': 'application/json'
 		}
 	}
-	return fetch('https://localhost/forumThreads', requestOptions)
+	return fetch(config.URL + '/forumThreads', requestOptions)
 		.then(handleGenericResponse)
 		.then(threads => {
 			return threads
@@ -356,7 +359,7 @@ function createThreadQuery(token, thread){
 			"ownerID": thread.ownerID
 		})
 	}
-	return fetch('https://localhost/forumThreads', requestOptions)
+	return fetch(config.URL + '/forumThreads', requestOptions)
 }
 
 export function updateThread(token, thread) {
@@ -385,7 +388,7 @@ function updateThreadQuery(token, thread){
 			"description": thread.description
 		})
 	}
-	return fetch('https://localhost/forumThreads/' + thread._id, requestOptions)
+	return fetch(config.URL + '/forumThreads/' + thread._id, requestOptions)
 }
 
 export function deleteThread(token, id) {
@@ -410,7 +413,7 @@ function deleteThreadQuery(token, id){
 			'authorization': "Basic " + token
 		}
 	}
-	return fetch('https://localhost/forumThreads/' + id, requestOptions)
+	return fetch(config.URL + '/forumThreads/' + id, requestOptions)
 }
 
 export function deleteUserQuery(token, id){
@@ -422,7 +425,7 @@ export function deleteUserQuery(token, id){
 			'authorization': "Basic " + token
 		}
 	}
-	return fetch('https://localhost/users/' + id, requestOptions)
+	return fetch(config.URL + '/users/' + id, requestOptions)
 }
 
 function editUserQuery(token, id, name, pw, isAdmin){
@@ -450,7 +453,7 @@ function editUserQuery(token, id, name, pw, isAdmin){
 		},
 		body: body
 	}
-	return fetch('https://localhost/users/' + id, requestOptions)
+	return fetch(config.URL + '/users/' + id, requestOptions)
 }
 
 function createUserQuery(token, id, name, pw, isAdmin){
@@ -468,7 +471,7 @@ function createUserQuery(token, id, name, pw, isAdmin){
 			"isAdministrator": isAdmin
 		})
 	}
-	return fetch('https://localhost/users/', requestOptions)
+	return fetch(config.URL + '/users/', requestOptions)
 }
 
 export function getMessages(threadID) {
@@ -492,7 +495,7 @@ function getMessagesQuery(threadID){
 			'Content-Type': 'application/json'
 		}
 	}
-	return fetch('https://localhost/forumMessages?forumThreadID=' + threadID, requestOptions)
+	return fetch(config.URL + '/forumMessages?forumThreadID=' + threadID, requestOptions)
 		.then(handleGenericResponse)
 		.then(messages => {
 			return messages
@@ -513,7 +516,6 @@ export function createMessage(token, message) {
 }
 
 function createMessageQuery(token, message){
-	console.log(message, "hey")
 	const requestOptions = {
 		method: 'POST',
 		mode: "cors",
@@ -528,7 +530,7 @@ function createMessageQuery(token, message){
 			"authorID": message.authorID
 		})
 	}
-	return fetch('https://localhost/forumMessages', requestOptions)
+	return fetch(config.URL + '/forumMessages', requestOptions)
 }
 
 function handleResponse(response){
